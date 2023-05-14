@@ -1,7 +1,10 @@
+<%@ page import="com.gestion_contact.Entities.Contact" %>
+<%@ page import="java.util.List" %>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1" %>
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
 <%--hada blan--%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
 <div class="modal fade" id="modaladdgroup" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -18,7 +21,7 @@
                     <div class="mb-3">
                         <label>Contacts :</label>
                         <ul>
-                            <c:forEach items="${contacts}" var="contact">
+                            <c:forEach items="${all}" var="contact">
                                 <li>
                                     <label>
                                         <input type="checkbox" name="contactIds" class="form-check-input" value="${contact.id_Contact}">

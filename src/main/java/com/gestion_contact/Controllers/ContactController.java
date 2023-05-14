@@ -6,6 +6,7 @@ import com.gestion_contact.Servies.ContactService;
 import com.gestion_contact.Servies.GroupeService;
 import com.gestion_contact.Servies.Interface.IContactService;
 import com.gestion_contact.Servies.Interface.IGroupeService;
+import com.gestion_contact.utils.CookieManager;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -55,15 +56,14 @@ public class ContactController {
         // le formualaire lorsque il y'a d'erreur.
         if (bindingResult.hasErrors()) {
             // on créer un Cookie et on l'ajout à la réponse de la requette HTTP
-            Cookie cookie = new Cookie("modalShownadd", "true");
-            response.addCookie(cookie);
+            CookieManager.createCookie("modalShownadd", "true", response);
             // on renvoi le View, à ce momoent la Modal va surgir automatiquement.
             return "add";
         }
 
-        // sinon si le cookie existe déja on doit rendre sa valeur à null, pour que le Modal ne surgit pas
-        Cookie cookie = new Cookie("modalShownadd", null);
-        response.addCookie(cookie);
+        // sinon si le cookie existe déja on doit le supprimé, pour que le Modal ne surgit pas
+        CookieManager.deleteCookie(response, "modalShownadd");
+
         // on crée un contact
         contactService.create(contact);
         // on ajoute un message pour l'information
@@ -83,7 +83,6 @@ public class ContactController {
         // on supprime le contact
         contactService.deleteContact(id_contact);
         //on ajoute un message juste pour informer l'utilisateur
-        /*request.setAttribute("message",String.format("le contact  %s %s / %s est bien supprimé ",nom,prenom,tele));*/
         model.addAttribute("message", String.format("le contact  %s %s / %s est bien supprimé ", nom, prenom, tele));
         return "forward:/";
     }
@@ -94,13 +93,18 @@ public class ContactController {
     @PostMapping("/modifiercontact")
     public String modifiercontact(@Valid @ModelAttribute("contact") Contact contact, BindingResult bindingResult, HttpServletResponse response) {
         if (bindingResult.hasErrors()) {
-            Cookie cookie = new Cookie("modalShownupdate", "true");
-            response.addCookie(cookie);
+
+            /*Cookie cookie = new Cookie("modalShownupdate", "true");
+            response.addCookie(cookie);*/
+
+            CookieManager.createCookie("modalShownupdate", "true", response);
             return "add";
         }
 
-        Cookie cookie = new Cookie("modalShownupdate", null);
-        response.addCookie(cookie);
+       /* Cookie cookie = new Cookie("modalShownupdate", null);
+        response.addCookie(cookie);*/
+
+        CookieManager.deleteCookie(response, "modalShownupdate");
 
         contactService.updateContact(contact.getId_Contact(), contact);
         return "forward:/";
@@ -110,16 +114,18 @@ public class ContactController {
     // la méthode qui permet de rechercher un Contact par nom
     @PostMapping("/rechercherparnom")
     public String rechercherparnom(@RequestParam("nom") String nom, Model model) {
-        var contacts = contactService.chercherParNom(nom);
-        model.addAttribute("contacts", contacts);
+        var contactsparrecherche = contactService.chercherParNom(nom);
+        model.addAttribute("contacts", contactsparrecherche);
+
         return "add";
     }
 
     // la méthode qui permet de rechercher un Contact par numéro de téléphone
     @PostMapping("/rechercherpartelephone")
     public String rechercherparnumerodetelephone(@RequestParam("numerotelephone") String numero, Model model) {
-        var contacts = contactService.chercherParNumerodeTelephone(numero);
-        model.addAttribute("contacts", contacts);
+        var contactsderecherche = contactService.chercherParNumerodeTelephone(numero);
+        model.addAttribute("contacts", contactsderecherche);
+
         return "add";
     }
 
@@ -170,6 +176,8 @@ public class ContactController {
     public String cherchergroupe(@RequestParam("nom") String nomgroup, Model model) {
         var groups = groupeService.getGroupeListbyNom(nomgroup);
         model.addAttribute("groups", groups);
+
+
         return "add";
     }
 
@@ -179,5 +187,13 @@ public class ContactController {
         return new Contact();
     }
 
+
+    // j'ai utilisé le Modal dans bootstrap pour afficher les formulaire
+    // donc lorsque je veux ajouter un groupe j'ai toujours besoin d'extraire tous les contacts
+    // pour cela j'ai utilisé cette méthode
+    @ModelAttribute("all")
+    public List<Contact> gettAllContact() {
+        return contactService.getAllContactByOrder();
+    }
 
 }

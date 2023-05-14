@@ -24,6 +24,7 @@ public class Contact {
     private String telephone1;
     @Pattern(regexp = "^06\\d{8}$",message = "veuillez vérifier le numéro Professionnel de téléphone que vous avez saisis")
     private String telephone2;
+    @NotBlank(message = "l'adresse ne doit pas étre null")
     public String adress;
     @Pattern(regexp = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$",message = "vérfiez que vous avez saisis un email personnel valide")
     private String emailpersonnel;
