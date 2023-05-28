@@ -60,68 +60,6 @@
 
 </c:if>
 
-
-
-<c:if test="${not empty contactsderecherche}">
-    <table class="table table-striped table-success table-hover border border-1 border-success shadow shadow-lg table-auto">
-        <thead>
-        <tr>
-                <%-- <th class="text-center" scope="col">id</th>--%>
-            <th class="text-center" scope="col">nom</th>
-            <th class="text-center" scope="col">prenom</th>
-            <th class="text-center" scope="col">Genre</th>
-            <th class="text-center" scope="col">adresse</th>
-            <th class="text-center" scope="col">téléphone1</th>
-            <th class="text-center" scope="col">téléphone2</th>
-            <th class="text-center" scope="col">email1</th>
-            <th class="text-center" scope="col">email2</th>
-            <th class="text-center" scope="col" class="text-center" colspan="2">Action</th>
-
-        </tr>
-        </thead>
-        <tbody>
-        <c:forEach items="${contactsderecherche}" var="contact">
-            <tr>
-                    <%-- <td class="text-center">${contact.id_Contact}</td>--%>
-                <td class="text-center">${contact.nom}</td>
-                <td class="text-center">${contact.prenom}</td>
-                <td class="text-center">${contact.genre}</td>
-                <td class="text-center">${contact.adress}</td>
-                <td class="text-center">${contact.telephone1}</td>
-                <td class="text-center">${contact.telephone2}</td>
-
-                <td class="text-center">${contact.emailpersonnel}</td>
-                <td class="text-center">${contact.emailprofessional}</td>
-
-                <td class="text-center"><a href="/deletecontact/${contact.id_Contact}">
-                    <button class="btn btn-danger"
-                            onclick="confirm('voulez vous vraiment supprimer cette contact??')"> supprimer
-                    </button>
-                </a></td>
-                <td class="text-center">
-                    <button class=" btn btn-secondary modifier" data-id="${contact.id_Contact}"> modifier
-                    </button>
-                </td>
-
-            </tr>
-
-        </c:forEach>
-
-        </tbody>
-    </table>
-
-</c:if>
-
-
-
-
-
-
-
-
-
-
-
 <c:if test="${not empty groups}">
 
     <table class="table table-striped table-success table-hover border border-danger  table-auto">
